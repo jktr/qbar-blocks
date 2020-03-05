@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+readonly tasks="$(task +DUETODAY export)"
+
+if [ "$(<<< "$tasks" jq 'length')" != 0 ]; then
+    echo -n "📝︎ "
+fi
+
+<<< "$tasks" jq -rf <(cat <<EOF
+sort_by(.due)|map(
+  (.due|strptime("%Y%m%dT%H%M%SZ")|mktime|strftime("%H:%M"))
+  + " " #+ "\(.id) "
+  + (.description|tostring)
+)|join(" ")
+EOF
+)

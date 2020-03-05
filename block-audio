@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+readonly sink=
+
+readonly mute="$(pulsemixer --get-mute)"
+readonly volume="$(pulsemixer --get-volume)"
+readonly inputs="$(pulsemixer --list-sinks|grep input|wc -l)"
+readonly mpd="$(mpc --host /run/mpd:6600 status)"
+
+if [ -n "$volume" ]; then
+    [ "$inputs" -gt 0 ] && echo -n '<active>'
+    if [ "$mute" = 0 ]; then
+        echo -n '🔉︎ '
+    else
+        echo -n '<warning>🔇︎ '
+    fi
+    echo -n "${volume:0:2}%"
+    [ "$mute" = 1 ] && echo -n '</warning>'
+    [ "$inputs" -gt 0 ] && echo -n '</active>'
+fi
+
+if [ "$(<<< $mpd tail -1|cut -d' ' -f2)" != 'n/a' ]; then
+    grep -q '\[playing\]' <<< "$mpd" && echo -n '<active>'
+    echo -n " ♫ $(<<< $mpd tail -1|cut -d' ' -f2)"
+    grep -q '\[playing\]' <<< "$mpd" && echo -n '</active>'
+fi
+
+echo
+exit 0

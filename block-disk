@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+[ -z "$1" ] && exit 1
+
+echo -n '💾︎'
+while IFS=',' read -r avail pcent; do
+    if [ "${pcent:0:-1}" -gt 95 ]; then
+        tag=critical
+    elif [ "${pcent:0:-1}" -gt 85 ]; then
+        tag=error
+    elif [ "${pcent:0:-1}" -gt 70 ]; then
+        tag=warning
+    fi
+    [ -n "$tag" ] && echo -n "<$tag>"
+    echo -n " $avail"
+    [ -n "$tag" ] && echo -n "</$tag>"
+done <<< "$(df -h --output=avail,pcent "$@"|tail -n +2|awk '{print $1","$2}' 2>/dev/null)"
+
+echo
+exit 0
