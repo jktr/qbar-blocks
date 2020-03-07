@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 # SPDX-License-Identifier: GPL-3.0-or-later
+# depends: task jq
 
 readonly tasks="$(task +DUETODAY export)"
 

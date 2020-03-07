@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 # SPDX-License-Identifier: GPL-3.0-or-later
+# depends: nmcli
 
 readonly nmcli="$(nmcli c|tail +2|grep -v -- --)"
 readonly uplink="$(<<< $nmcli egrep '(wifi|ethernet)'|cut -d' ' -f1)"
