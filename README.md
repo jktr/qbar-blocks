@@ -6,7 +6,7 @@ excellent [QBar](https://git.c3pb.de/jens/qbar) status bar.
 Currently provided are
   * `block-audio` — volume/mute status for `pulseaudio` & `mpd`
   * `block-disk`  — free disk space for a directory
-  * `block-network` — `NetworkManager` connections & WireGuard VPN
+  * `block-vpn` — `NetworkManager` WireGuard VPN connections
   * `block-task` — `task` events scheduled for today
   
 Consult each block script for the necessary dependencies.

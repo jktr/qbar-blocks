@@ -4,16 +4,8 @@
 # depends: nmcli
 
 readonly nmcli="$(nmcli c|tail +2|grep -v -- --)"
-readonly uplink="$(<<< $nmcli egrep '(wifi|ethernet)'|cut -d' ' -f1)"
 readonly vpn="$(<<< $nmcli grep wireguard|cut -d' ' -f1)"
 
-if [ -n "$uplink" ]; then
-    echo -n "<active>🌍︎ $uplink</active>"
-else
-    echo -n "<error>🌍︎ uplink</error>"
-fi
-
-echo -n ' '
 if [ -n "$vpn" ]; then
     echo -n "<active>🔒︎$vpn</active>"
 else
