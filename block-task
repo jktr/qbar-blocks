@@ -10,10 +10,10 @@ if [ "$(<<< "$tasks" jq 'length')" != 0 ]; then
 fi
 
 <<< "$tasks" jq -rf <(cat <<EOF
-sort_by(.due)|map(
-  (.due|strptime("%Y%m%dT%H%M%SZ")|mktime|strftime("%H:%M"))
+sort_by(.due)[:5]|map(
+  (.due|strptime("%Y%m%dT%H%M%SZ")|mktime|strflocaltime("%H:%M"))
   + " " #+ "\(.id) "
   + (.description|tostring)
-)|join(" ")
+)|join(" / ")
 EOF
 )
