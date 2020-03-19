@@ -27,8 +27,8 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
             data = unpack(">bbbbQiii", data)
             msg += f'{data[5]}/{data[6]}'
         except socket.gaierror:
-            msg += '<error>unknown<error>'
+            msg += '<error>unknown</error>'
         except socket.timeout:
-            msg += '<warning>?/?<warning>'
+            msg += '<warning>?/?</warning>'
 
 print(msg)
