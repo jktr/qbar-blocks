@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # depends: task jq
 
-readonly tasks="$(task +DUETODAY export)"
+readonly tasks="$(task +DUETODAY export|jq 'map(select(.status != "recurring"))')"
 
 if [ "$(<<< "$tasks" jq 'length')" != 0 ]; then
     echo -n "📝︎ "
