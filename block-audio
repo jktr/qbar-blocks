@@ -24,7 +24,7 @@ fi
 
 if [ "$(<<< $mpd tail -1|cut -d' ' -f2)" != 'n/a' ]; then
     grep -q '\[playing\]' <<< "$mpd" && echo -n '<active>'
-    echo -n " ♫ $(<<< $mpd tail -1|cut -d' ' -f2)"
+    echo -n " ♫ $(<<< $mpd tail -1|awk '{print $2}')"
     grep -q '\[playing\]' <<< "$mpd" && echo -n '</active>'
 fi
 
