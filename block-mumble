@@ -7,17 +7,17 @@
 from struct import pack, unpack
 import socket, sys, time, datetime
 
-servers = [(*x.split(':'), 64738)[:2] for x in sys.argv[1:]]
-servers = [(host, int(port)) for (host, port) in servers]
+servers = [(*x.split(':'), 64738, 0)[:3] for x in sys.argv[1:]]
+servers = [(host, int(port), delta) for (host, port, delta) in servers]
 
 if not servers:
     exit(1)
 
-msg = '🎧︎'
+msg = '🎤︎'
 with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
     s.settimeout(1)
 
-    for host, port in servers:
+    for host, port, delta in servers:
         msg += f' {host}:' if len(servers) > 1 else ' '
         try:
             # https://wiki.mumble.info/wiki/Protocol
@@ -25,7 +25,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
             s.sendto(buf, (host, port))
             data, _ = s.recvfrom(1024)
             data = unpack(">bbbbQiii", data)
-            msg += f'{data[5]}/{data[6]}'
+            msg += f'{data[5] - int(delta)}/{data[6]}'
         except socket.gaierror:
             msg += '<error>unknown</error>'
         except socket.timeout:
