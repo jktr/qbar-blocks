@@ -4,10 +4,10 @@
 # depends: nmcli
 
 readonly nmcli="$(nmcli c|tail +2|grep -v -- --)"
-readonly vpn="$(<<< $nmcli grep -E '(wireguard|vpn)'|cut -d' ' -f1)"
+readonly vpn="$(<<< "$nmcli" grep -E '(wireguard|vpn)'|tr -s ' '|rev|cut -d' ' -f5-|rev)"
 
 if [ -n "$vpn" ]; then
-    echo -n "<active>🔒︎$vpn</active>"
+    echo -n "<active>🔒︎${vpn}</active>"
 else
     echo -n '🔓︎ VPN'
 fi
