@@ -8,7 +8,8 @@ Currently provided are
   * `block-disk`  — free disk space for a directory
   * `block-vpn` — `NetworkManager` WireGuard VPN connections
   * `block-task` — `task` events scheduled for today
-  * `block-mumble` — mumble server status: number of people connected
+  * `block-minecraft` — number of online players
+  * `block-mumble` — number of online mumble users
   
 Consult each block script for the necessary dependencies.
 Please prefer the built-in blocks to these scripts once
