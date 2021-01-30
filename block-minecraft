@@ -109,6 +109,9 @@ for host, port in servers:
             #  'version': {'name': '1.15.2', 'protocol': 578}}
             msg += f"{data['players']['online']}/{data['players']['max']}"
 
+            if data['players']['online'] > 0:
+                msg = '<active>' + msg + '</active>'
+
         except (ConnectionRefusedError, socket.gaierror):
             msg += '<error>unknown</error>'
         except socket.timeout:
