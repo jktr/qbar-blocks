@@ -9,6 +9,7 @@ Currently provided are
   * `block-icecast` — IceCast stream name and current listener count
   * `block-minecraft` — number of online players
   * `block-mumble` — number of online mumble users
+  * `block-mpd` — current artist and song, or filename
   * `block-task` — `task` events scheduled for today
   * `block-vpn` — `NetworkManager` WireGuard VPN connections
   

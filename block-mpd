@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+# SPDX-License-Identifier: GPL-3.0-or-later
+# depends: mpc coreutils
+
+export MPD_HOST=/run/mpd:6600
+
+readonly out="$(mpc --format '[[%artist% - ]%title%]|[%file%]')"
+
+<<< "$out" tail +2|grep --quiet -E '(playing|paused)' || exit 0
+<<< "$out" head -1|sed 's.<.\&lt\;.g;s.>.\&gt\;.g'
