@@ -14,6 +14,6 @@ sort_by(.due)[:5]|map(
   (.due|strptime("%Y%m%dT%H%M%SZ")|mktime|strflocaltime("%H:%M"))
   + " " #+ "\(.id) "
   + (.description|tostring)
-)|join(" / ")
+)|join(" / ")|@html
 EOF
 )
