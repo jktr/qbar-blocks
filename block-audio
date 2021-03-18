@@ -3,29 +3,26 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # depends: pulsemixer mpc
 
-readonly sink=
+export MPD_HOST=/run/mpd:6600
 
-readonly mute="$(pulsemixer --get-mute)"
-readonly volume="$(pulsemixer --get-volume)"
-readonly inputs="$(pulsemixer --list-sinks|grep input|wc -l)"
-readonly mpd="$(mpc --host /run/mpd:6600 status)"
+readonly pulse_mute="$(pulsemixer --get-mute)"
+readonly pulse_volume="$(pulsemixer --get-volume)"
+readonly pulse_input_count="$(pulsemixer --list-sinks|grep input|wc -l)"
 
-if [ -n "$volume" ]; then
-    [ "$inputs" -gt 0 ] && echo -n '<active>'
-    if [ "$mute" = 0 ]; then
-        echo -n '🔉︎ '
-    else
-        echo -n '<warning>🔇︎ '
-    fi
-    echo -n "${volume:0:2}%"
-    [ "$mute" = 1 ] && echo -n '</warning>'
-    [ "$inputs" -gt 0 ] && echo -n '</active>'
+readonly mpd_state="$(mpc status)"
+
+if [ -n "$pulse_volume" ]; then
+    [ "$pulse_input_count" -gt 0 ] && echo -n '<active>'
+    [ "$pulse_mute" = 0 ] && echo -n '🔉︎ ' || echo -n '<warning>🔇︎ '
+    echo -n "${pulse_volume:0:2}%"
+    [ "$pulse_mute" = 1 ] && echo -n '</warning>'
+    [ "$pulse_input_count" -gt 0 ] && echo -n '</active>'
 fi
 
-if [ "$(<<< $mpd tail -1|cut -d' ' -f2)" != 'n/a' ]; then
-    grep -q '\[playing\]' <<< "$mpd" && echo -n '<active>'
-    echo -n " ♫ $(<<< $mpd tail -1|awk '{print $2}')"
-    grep -q '\[playing\]' <<< "$mpd" && echo -n '</active>'
+if [ "$(<<< "$mpd_state" tail -1|cut -d' ' -f2)" != 'n/a' ]; then
+    <<< "$mpd_state" grep -q '\[playing\]' && echo -n ' <active>'
+    echo -n "♫ $(<<< "$mpd_state" tail -1|awk '{print $2}')"
+    <<< "$mpd_state" grep -q '\[playing\]' && echo -n '</active>'
 fi
 
 echo
