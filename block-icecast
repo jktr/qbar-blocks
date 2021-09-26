@@ -7,16 +7,22 @@ set -uo pipefail
 
 readonly api_url="$1"
 readonly idle_name="${2:-fallback}"
-readonly broken_label="${3:-broken}"
+readonly idle_remap="${3:-$idle_name}"
+readonly broken_label="${4:-broken}"
 
 readonly prog='[.icestats.source]|flatten|map(select(.server_name))|last|"\(.listeners) \(.server_name)"|@html'
 readonly resp=$(curl -s --fail --max-time 3 "$api_url"|jq -r "$prog")
+
+if [ "$resp" = 'null null' ]; then
+  echo "<critical>${broken_label}</critical>"
+  exit
+fi
 
 readonly stream_name="$(cut -d' ' -f2- <<< "$resp")"
 readonly stream_listeners="$(cut -d' ' -f1 <<< "$resp")"
 
 case "$stream_name" in
-  "$idle_name") echo "♫ ${stream_name} ${stream_listeners}" ;;
+  "$idle_name") echo "♫ ${idle_remap} ${stream_listeners}" ;;
   '') echo "<critical>${broken_label}</critical>" ;;
   *) echo "<active>♫ ${stream_name} ${stream_listeners}</active>" ;;
 esac
