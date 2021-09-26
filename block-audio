@@ -3,8 +3,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # depends: pulsemixer mpc
 
-export MPD_HOST=/run/mpd:6600
-
 readonly pulse_mute="$(pulsemixer --get-mute)"
 readonly pulse_volume="$(pulsemixer --get-volume)"
 readonly pulse_input_count="$(pulsemixer --list-sinks|grep input|wc -l)"
